@@ -5,28 +5,28 @@
         $scope.error = "";
         $scope.showSuccess = false;
         $scope.success = "";
-        $scope.booksList = [];
+        $scope.cutsList = [];
 
 
         $scope.onLoad = function (e, reader, file, fileList, fileOjects, fileObj) {
-            alert('this is handler for file reader onload event!');
+         
           };
         
           var uploadedCount = 0;
         
           $scope.files = [];
 
-        console.log("myfile "+$scope.myfile);
-        //listBooks();
-        function listBooks() {
+       
+          listCuts();
+        function listCuts() {
             $http({
                 method: 'GET',
-                url: 'http://localhost:1050/books'
+                url: 'http://localhost:1050/cuts'
             }).then(function successCallback(response) {
-                $scope.booksList = response.data;
+                $scope.cutsList = response.data;
             }, function errorCallback(response) {
-                $scope.booksList = [];
-                $scope.error = "Error consultando los libros";
+                $scope.cutsList = [];
+                $scope.error = "Error consultando los cortes";
                 $scope.showError = true;
                 $scope.showSuccess = false;
             });
@@ -46,44 +46,46 @@
         } 
 
 
-        $scope.newBook = function (bookId) {
-            if ($scope.book != undefined && $scope.book.bookId != undefined) {
-                $scope.book = {};
+        $scope.newCut = function (cutId) {
+            if ($scope.cut != undefined && $scope.cut.cutId != undefined) {
+                $scope.cut = {};
             }
             jQuery("#booksModal").modal("show");
         }
-        $scope.getBook = function (bookId) {
+        $scope.getCut = function (cutId) {
             $http({
                 method: 'GET',
-                url: 'http://localhost:1050/books?bookId=' + bookId
+                url: 'http://localhost:1050/cuts?cutId=' + cutId
             }).then(function successCallback(response) {
                 if (response.data != null && response.data.length > 0) {
-                    $scope.book = response.data[0];    
-                    $scope.book.bookId = response.data[0]._id;
+                    $scope.cut = response.data[0];    
+                    $scope.cut.cutId = response.data[0]._id;
                     jQuery("#booksModal").modal("show");
                 } else {
-                    $scope.book = {};
+                    $scope.cut = {};
                     $scope.error = "Error consultando los datos del libro";
                     $scope.showError = true;
                     $scope.showSuccess = false;
                 }
             }, function errorCallback(response) {
-                $scope.book = {};
+                $scope.cut = {};
             });
         }
-        $scope.deleteBook = function (bookId) {
-            $scope.book = {bookId: bookId}
+        $scope.deleteCut = function (cutId) {
+            $scope.cut = {cutId: cutId}
             jQuery("#deleteModal").modal("show");
         }
-        $scope.saveBook = function () {
+        $scope.saveCut = function () {
+            
+            var img = new Buffer($scope.cut.cutImage, 'base64');
             $http({
                 method: 'POST',
-                url: 'http://localhost:1050/books',
-                data: $scope.book
+                url: 'http://localhost:1050/cuts',
+                data: $scope.cut
             }).then(function successCallback(response) {
-                $scope.book = {};
-                listBooks();
-                $scope.success = "El libro ha sido guardado correctamente";
+                $scope.cut = {};
+                listCuts();
+                $scope.success = "El corte ha sido guardado correctamente";
                 $scope.showError = false;
                 $scope.showSuccess = true;
                 jQuery("#booksModal").modal("hide");
@@ -97,16 +99,16 @@
         $scope.confirmDelete = function () {
             $http({
                 method: 'DELETE',
-                url: 'http://localhost:1050/books?bookId=' + $scope.book.bookId
+                url: 'http://localhost:1050/cuts?cutId=' + $scope.cut.cutId
             }).then(function successCallback(response) {
-                $scope.book = {};
-                listBooks();
+                $scope.cut = {};
+                listCuts();
                 $scope.success = "El libro ha sido eliminado correctamente";
                 $scope.showError = false;
                 $scope.showSuccess = true;
                 jQuery("#deleteModal").modal("hide");
             }, function errorCallback(response) {
-                $scope.book = {};
+                $scope.cut = {};
                 $scope.error = response.data.errors;
                 $scope.showError = true;
                 $scope.showSuccess = false;

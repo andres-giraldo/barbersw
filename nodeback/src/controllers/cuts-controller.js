@@ -21,16 +21,17 @@ exports.saveCut= function (request, response) {
             existentCut.cutDescription = request.body.cutDescription;
             existentCut.cutTime = request.body.cutTime;
             existentCut.cutImage = request.body.cutImage;
-            saveData(existentBook, response);
+            saveData(existentCut, response);
         });
     } else {
+        
         /* Create a book */
-        saveData(new Book({ cutDescription: request.body.cutDescription, cutTime: request.body.cutTime, cutImage: request.body.cutImage}), response);
+        saveData(new Cut({ cutDescription: request.body.cutDescription, cutTime: request.body.cutTime, cutImage: request.body.cutImage}), response);
     }
 };
 
 function saveData(cut, response) {
-    book.save(function (error) {
+    cut.save(function (error) {
         if (error) {
             response.status(400).send(error);
         } else {
@@ -42,7 +43,7 @@ function saveData(cut, response) {
 exports.deleteCut = function (request, response) {
     console.log(request);
     if (request.query.cutId != null && request.query.cutId != "") {
-        Cut.remove({ _id: request.query.cutId }, function (error, book) {
+        Cut.remove({ _id: request.query.cutId }, function (error, cut) {
             if (error) {
                 response.status(400).send(error);
             } else {

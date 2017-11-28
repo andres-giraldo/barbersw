@@ -23,7 +23,6 @@
     </div>
     <div class="alert alert-success" ng-show="showSuccess">
         {{ success }}
-        {{file.base64}
     </div>
     <table class="table">
         <thead>
@@ -35,38 +34,26 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="bookItem in booksList">
+            <tr ng-repeat="cutItem in cutsList">
                 <td>
-                    {{ bookItem.bookTitle }}
+                    {{ cutItem.cutDescription }}
                 </td>
                 <td>
-                    {{ bookItem.bookAuthor }}
+                    {{ cutItem.cutTime }}
                 </td>
                 <td>
-                    {{ bookItem.bookPages }}
+                    {{ cutItem.cutImage }}
                 </td>
                 <td>
-                    <button type="button" ng-click="getBook(bookItem._id);" class="btn btn-primary">Editar</button>
-                    <button type="button" ng-click="deleteBook(bookItem._id);" class="btn btn-primary">Eliminar</button>
+                    <button type="button" ng-click="getCut(cutItem._id);" class="btn btn-primary">Editar</button>
+                    <button type="button" ng-click="deleteCut(cutItem._id);" class="btn btn-primary">Eliminar</button>
                 </td>
             </tr>
         </tbody>
     </table>
 
-    <table class="table table-bordered table-striped">
-        <tr>
-          <th>filename</th>
-          <th>filetype</th>
-          <th>filesize (<i><small>KB</small></i>)</th>
-          <th>base64</th>
-        </tr>
-        <tr ng-show="file">
-          <td>{{file.filename}}</td>
-          <td>{{file.filetype}}</td>
-          <td>{{file.filesize / 1000}}</td>
-          <td>{{file.base64}}</td>
-        </tr>
-    <button type="button" ng-click="newBook();" class="btn btn-primary">Nuevo</button>
+    
+    <button type="button" ng-click="newCut();" class="btn btn-primary">Nuevo</button>
 
     <input type="hidden" ng-model="book.bookId" />
 
@@ -83,19 +70,24 @@
 
                     <div class="form-group">
                         <label>Descripci&oacute;n</label>
-                        <input type="text" class="form-control" ng-model="book.bookTitle">
+                        <input type="text" class="form-control" ng-model="cut.cutDescription">
                     </div>
                     <div class="form-group">
                         <label>Tiempo</label>
-                        <input type="text" class="form-control" ng-model="book.bookAuthor">
+                        <input type="number" class="form-control" ng-model="cut.cutTime">
                     </div>
                     <div class="form-group">
                         <label>Foto</label>
-                        <input type="file" ng-model="file" name="file" base-sixty-four-input required onload="onLoad" maxsize="500" accept="image/*">
+                        <input type="file" ng-model="cut.cutImage" name="file" base-sixty-four-input required onload="onLoad" maxsize="500" accept="image/*">
+                    </div>
+                    <div >
+
+                       
+                       <img data-ng-src="data:image/png;base64,{{cut.cutImage.base64}}" width="300" height="300" />
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" ng-click="saveBook();" class="btn btn-primary">Guardar</button>
+                    <button type="button" ng-click="saveCut();" class="btn btn-primary">Guardar</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 </div>
             </div>
