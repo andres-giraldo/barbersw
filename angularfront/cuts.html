@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html ng-app="booksApp">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Libros</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" />
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+    <script src="js/lib/angular.min.js"></script>
+    <script src="js/controllers/cuts-controller.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/adonespitogo/angular-base64-upload/master/src/angular-base64-upload.js"></script>
+</head>
+
+<body class="container" ng-controller="cutsController">
+    <center>
+        <h1>LIBROS</h1>
+    </center>
+    <div class="alert alert-danger" ng-show="showError">
+        {{ error }}
+    </div>
+    <div class="alert alert-success" ng-show="showSuccess">
+        {{ success }}
+        {{file.base64}
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Descripcion</th>
+                <th scope="col">Tiempo</th>
+                <th scope="col">Foto</th>
+                <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="bookItem in booksList">
+                <td>
+                    {{ bookItem.bookTitle }}
+                </td>
+                <td>
+                    {{ bookItem.bookAuthor }}
+                </td>
+                <td>
+                    {{ bookItem.bookPages }}
+                </td>
+                <td>
+                    <button type="button" ng-click="getBook(bookItem._id);" class="btn btn-primary">Editar</button>
+                    <button type="button" ng-click="deleteBook(bookItem._id);" class="btn btn-primary">Eliminar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-bordered table-striped">
+        <tr>
+          <th>filename</th>
+          <th>filetype</th>
+          <th>filesize (<i><small>KB</small></i>)</th>
+          <th>base64</th>
+        </tr>
+        <tr ng-show="file">
+          <td>{{file.filename}}</td>
+          <td>{{file.filetype}}</td>
+          <td>{{file.filesize / 1000}}</td>
+          <td>{{file.base64}}</td>
+        </tr>
+    <button type="button" ng-click="newBook();" class="btn btn-primary">Nuevo</button>
+
+    <input type="hidden" ng-model="book.bookId" />
+
+    <div class="modal" id="booksModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Libro</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label>Descripci&oacute;n</label>
+                        <input type="text" class="form-control" ng-model="book.bookTitle">
+                    </div>
+                    <div class="form-group">
+                        <label>Tiempo</label>
+                        <input type="text" class="form-control" ng-model="book.bookAuthor">
+                    </div>
+                    <div class="form-group">
+                        <label>Foto</label>
+                        <input type="file" ng-model="file" name="file" base-sixty-four-input required onload="onLoad" maxsize="500" accept="image/*">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ng-click="saveBook();" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="deleteModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Está seguro que desea eliminar el libro?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ng-click="confirmDelete();" class="btn btn-primary">Si</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

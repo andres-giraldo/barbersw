@@ -5,6 +5,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const app = express();
 const newRoutes = require('./src/routes/new-routes');
+const cutsRoutes = require('./src/routes/cuts-routes');
 
 mongoose.connect("mongodb://localhost/barbersw", {
     socketTimeoutMS: 0,
@@ -28,5 +29,6 @@ apiRoutes.use(function (request, response, next) {
 });
 app.use(apiRoutes);
 
-newRoutes(app);
+//newRoutes(app);
+cutsRoutes(app);
 app.listen(1050);
