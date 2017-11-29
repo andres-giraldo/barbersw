@@ -6,10 +6,11 @@
         $scope.showSuccess = false;
         $scope.success = "";
         $scope.cutsList = [];
+        $scope.edit=0;
 
 
         $scope.onLoad = function (e, reader, file, fileList, fileOjects, fileObj) {
-         
+            $scope.edit=2;
           };
         
           var uploadedCount = 0;
@@ -24,7 +25,8 @@
                 url: 'http://localhost:1050/cuts'
             }).then(function successCallback(response) {
                 $scope.cutsList = response.data;
-            }, function errorCallback(response) {
+                console.log(JSON.stringify(response.data));
+            }, function errorCallback( response) {
                 $scope.cutsList = [];
                 $scope.error = "Error consultando los cortes";
                 $scope.showError = true;
@@ -47,12 +49,14 @@
 
 
         $scope.newCut = function (cutId) {
+            $scope.edit=0;
             if ($scope.cut != undefined && $scope.cut.cutId != undefined) {
                 $scope.cut = {};
             }
             jQuery("#booksModal").modal("show");
         }
         $scope.getCut = function (cutId) {
+            $scope.edit=1;
             $http({
                 method: 'GET',
                 url: 'http://localhost:1050/cuts?cutId=' + cutId
@@ -60,6 +64,7 @@
                 if (response.data != null && response.data.length > 0) {
                     $scope.cut = response.data[0];    
                     $scope.cut.cutId = response.data[0]._id;
+                    console.log($scope.cut.cutTime);
                     jQuery("#booksModal").modal("show");
                 } else {
                     $scope.cut = {};
@@ -76,11 +81,17 @@
             jQuery("#deleteModal").modal("show");
         }
         $scope.saveCut = function () {
+
+           // var blob = new Blob([$scope.cut.cutImage], {type: 'image/png'});
+            //var file = new File([blob], 'imageFileName.png');
             
-            var img = new Buffer($scope.cut.cutImage, 'base64');
+           // var img = new Buffer($scope.cut.cutImage, 'base64');
             $http({
                 method: 'POST',
                 url: 'http://localhost:1050/cuts',
+                headers: {
+					'Content-Type': 'application/json'
+				},
                 data: $scope.cut
             }).then(function successCallback(response) {
                 $scope.cut = {};

@@ -18,8 +18,14 @@ mongoose.connection.on("error", () => {
     process.exit();
 });
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({
+    limit: '5mb'
+}));
+app.use(bodyParser.urlencoded({
+    limit: '5mb',
+    parameterLimit: 100000,
+    extended: true
+}));
 app.use(morgan('dev'));
 app.use(cors());
 

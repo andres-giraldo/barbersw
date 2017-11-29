@@ -41,7 +41,8 @@
                     {{ cutItem.cutTime }}
                 </td>
                 <td>
-                    {{ cutItem.cutImage }}
+                        <img ng-src=" C://{{ cutItem.cutImage }}" width="300" height="300">
+                   
                 </td>
                 <td>
                     <button type="button" ng-click="getCut(cutItem._id);" class="btn btn-primary">Editar</button>
@@ -73,17 +74,22 @@
                     </div>
                     <div class="form-group">
                         <label>Tiempo</label>
-                        <input type="number" class="form-control" ng-model="cut.cutTime">
+                        <input type="text" class="form-control" ng-model="cut.cutTime">
                     </div>
                     <div class="form-group">
                         <label>Foto</label>
                         <input type="file" ng-model="cut.cutImage" name="file" base-sixty-four-input required onload="onLoad" maxsize="500" accept="image/*">
                     </div>
-                    <div>
+                    <div ng-if="edit==0 || edit==2">
 
 
-                        <img data-ng-src="data:image/png;base64,{{cut.cutImage.base64}}" width="300" height="300" />
+                        <img data-ng-src="data:image/png;base64,{{cut.cutImage.base64}}" width="300" height="300"  />
                     </div>
+                    <div ng-if="edit==1">
+                            
+                            
+                            <img ng-src=" C://{{ cut.cutImage }}" width="300" height="300">
+                                                </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" ng-click="saveCut();" class="btn btn-primary">Guardar</button>
