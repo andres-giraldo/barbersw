@@ -4,14 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Libros</title>
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" />
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
     <script src="js/lib/angular.min.js"></script>
+    <script src="js/lib/jquery-3.1.1.slim.min.js"></script>
+    <script src="js/lib/tether.min.js"></script>
+    <script src="js/lib/bootstrap.min.js"></script>
     <script src="js/controllers/cuts-controller.js"></script>
-    <script type="text/javascript" src="https://cdn.rawgit.com/adonespitogo/angular-base64-upload/master/src/angular-base64-upload.js"></script>
+    <script src="js/lib/angular-base64-upload.js"></script>
 </head>
 
 <body class="container" ng-controller="cutsController">
@@ -52,7 +51,7 @@
         </tbody>
     </table>
 
-    
+
     <button type="button" ng-click="newCut();" class="btn btn-primary">Nuevo</button>
 
     <input type="hidden" ng-model="book.bookId" />
@@ -80,10 +79,10 @@
                         <label>Foto</label>
                         <input type="file" ng-model="cut.cutImage" name="file" base-sixty-four-input required onload="onLoad" maxsize="500" accept="image/*">
                     </div>
-                    <div >
+                    <div>
 
-                       
-                       <img data-ng-src="data:image/png;base64,{{cut.cutImage.base64}}" width="300" height="300" />
+
+                        <img data-ng-src="data:image/png;base64,{{cut.cutImage.base64}}" width="300" height="300" />
                     </div>
                 </div>
                 <div class="modal-footer">
