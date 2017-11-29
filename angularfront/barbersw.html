@@ -1,0 +1,50 @@
+<html ng-app="barberswApp">
+
+<head>
+    <meta charset="UTF-8">
+    <title>BarberSW</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+
+    <script src="js/lib/angular.min.js"></script>
+    <script src="js/lib/angular-route.min.js"></script>
+    <script src="js/barbersw.js"></script>
+
+    <script src="js/lib/jquery-3.1.1.slim.min.js"></script>
+    <script src="js/lib/tether.min.js"></script>
+    <script src="js/lib/bootstrap.min.js"></script>
+    <script src="js/lib/angular-base64-upload.js"></script>
+</head>
+
+<body ng-controller="mainController">
+    <header>
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">BarberSW</a>
+                </div>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-home"></i> Inicio
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#cuts">
+                            <i class="fa fa-shield"></i> Cortes
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#contact">
+                            <i class="fa fa-comment"></i> Reservas
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <div ng-view></div>
+</body>
+
+</html>
