@@ -26,8 +26,8 @@
                     {{ cutItem.cutTime }}
                 </td>
                 <td>
-                        <img ng-src=" C://{{ cutItem.cutImage }}" width="300" height="300">
-                   
+                    <img ng-src=" C://{{ cutItem.cutImage }}" width="300" height="300">
+
                 </td>
                 <td>
                     <button type="button" ng-click="getCut(cutItem._id);" class="btn btn-primary">Editar</button>
@@ -68,13 +68,13 @@
                     <div ng-if="edit==0 || edit==2">
 
 
-                        <img data-ng-src="data:image/png;base64,{{cut.cutImage.base64}}" width="300" height="300"  />
+                        <img data-ng-src="data:image/png;base64,{{cut.cutImage.base64}}" width="300" height="300" />
                     </div>
                     <div ng-if="edit==1">
-                            
-                            
-                            <img ng-src=" C://{{ cut.cutImage }}" width="300" height="300">
-                                                </div>
+
+
+                        <img ng-src=" C://{{ cut.cutImage }}" width="300" height="300">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" ng-click="saveCut();" class="btn btn-primary">Guardar</button>
