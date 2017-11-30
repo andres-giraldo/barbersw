@@ -15,9 +15,9 @@ app.config(function ($routeProvider) {
         })
 
         // route for the contact page
-        .when('/contact', {
-            templateUrl: 'pages/contact.html',
-            controller: 'contactController'
+        .when('/reservations', {
+            templateUrl: 'pages/reservations.html',
+            controller: 'reservationController'
         });
 });
 
@@ -140,6 +140,100 @@ app.controller('cutsController', ['$scope', '$http', function ($scope, $http) {
     }
 }]);
 
-app.controller('contactController', function ($scope) {
-    $scope.message = 'Contact us! JK. This is just a demo.';
-});
+app.controller('reservationController', ['$scope', '$http', function ($scope, $http) {
+    $scope.showError = false;
+    $scope.error = "";
+    $scope.showSuccess = false;
+    $scope.success = "";
+    $scope.reservationsList = [];
+
+    $scope.onLoad = function (e, reader, file, fileList, fileOjects, fileObj) {
+    };
+
+    listReservations();
+    function listReservations() {
+        $http({
+            method: 'GET',
+            url: 'http://localhost:1050/reservations'
+        }).then(function successCallback(response) {
+            $scope.reservationsList = response.data;
+        }, function errorCallback(response) {
+            $scope.reservationsList = [];
+            $scope.error = "Error consultando las reservas";
+            $scope.showError = true;
+            $scope.showSuccess = false;
+        });
+    }
+
+    $scope.getReservation = function (reservationId) {
+        $http({
+            method: 'GET',
+            url: 'http://localhost:1050/reservations?reservationId=' + reservationId
+        }).then(function successCallback(response) {
+            if (response.data != null && response.data.length > 0) {
+                $scope.reservation = response.data[0];
+                $scope.reservation.reservationId = response.data[0]._id;
+                jQuery("#reservationsModal").modal("show");
+            } else {
+                $scope.reservation = {};
+                $scope.error = "Error consultando los datos de la reserva";
+                $scope.showError = true;
+                $scope.showSuccess = false;
+            }
+        }, function errorCallback(response) {
+            $scope.reservation = {};
+        });
+    }
+
+    $scope.saveReservation = function () {
+        $http({
+            method: 'POST',
+            url: 'http://localhost:1050/reservations',
+            data: $scope.reservation
+        }).then(function successCallback(response) {
+            $scope.reservation = {};
+            listReservations();
+            $scope.success = "La reserva se ha realizado correctamente";
+            $scope.showError = false;
+            $scope.showSuccess = true;
+            jQuery("#reservationsModal").modal("hide");
+        }, function errorCallback(response) {
+            $scope.error = response.data.errors;
+            $scope.showError = true;
+            $scope.showSuccess = false;
+            jQuery("#reservationsModal").modal("hide");
+        });
+    }
+
+    $scope.newReservation = function (reservationId) {
+        if ($scope.reservation != undefined && $scope.reservation.reservationId != undefined) {
+            $scope.reservation = {};
+        }
+        jQuery("#reservationsModal").modal("show");
+    }
+
+    $scope.deleteReservation = function (reservationId) {
+        $scope.reservation = { reservationId: reservationId }
+        jQuery("#deleteModal").modal("show");
+    }
+
+    $scope.confirmDelete = function () {
+        $http({
+            method: 'DELETE',
+            url: 'http://localhost:1050/reservations?reservationId=' + $scope.reservation.reservationId
+        }).then(function successCallback(response) {
+            $scope.reservation = {};
+            listReservations();
+            $scope.success = "La reserva se ha cancelado correctamente";
+            $scope.showError = false;
+            $scope.showSuccess = true;
+            jQuery("#deleteModal").modal("hide");
+        }, function errorCallback(response) {
+            $scope.reservation = {};
+            $scope.error = response.data.errors;
+            $scope.showError = true;
+            $scope.showSuccess = false;
+            jQuery("#deleteModal").modal("hide");
+        });
+    }
+}]);
