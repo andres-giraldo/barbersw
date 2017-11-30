@@ -138,7 +138,7 @@ app.controller('cutsController', ['$scope', '$http', function ($scope, $http) {
         }).then(function successCallback(response) {
             $scope.cut = {};
             listCuts();
-            $scope.success = "El libro ha sido eliminado correctamente";
+            $scope.success = "El corte ha sido eliminado correctamente";
             $scope.showError = false;
             $scope.showSuccess = true;
             jQuery("#deleteModal").modal("hide");
