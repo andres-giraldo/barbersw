@@ -26,7 +26,7 @@
                     {{ cutItem.cutTime }}
                 </td>
                 <td>
-                    <img ng-src=" C://{{ cutItem.cutImage }}" width="300" height="300">
+                    <img ng-src=" {{rute}}{{ cutItem.cutImage }}" width="300" height="300" />
 
                 </td>
                 <td>
@@ -46,7 +46,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Libro</h5>
+                    <h5 class="modal-title">Corte</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -73,7 +73,7 @@
                     <div ng-if="edit==1">
 
 
-                        <img ng-src=" C://{{ cut.cutImage }}" width="300" height="300">
+                        <img ng-src=" {{rute}}{{ cut.cutImage }}" width="300" height="300" />
                     </div>
                 </div>
                 <div class="modal-footer">

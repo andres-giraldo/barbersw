@@ -22,7 +22,8 @@ exports.saveCut= function (request, response) {
 
 
     var random=Math.random();
-    require("fs").writeFile("C://"+random+".png", imageCut, 'base64', function(err) {
+    
+    require("fs").writeFile("../angularfront/images/"+random+".png", imageCut, 'base64', function(err) {
       console.log(err);
     });
 
