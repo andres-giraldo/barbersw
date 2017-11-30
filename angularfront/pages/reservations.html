@@ -1,6 +1,6 @@
 <div class="container">
     <center>
-        <h1>Cortes</h1>
+        <h1>RESERVAS</h1>
     </center>
     <div class="alert alert-danger" ng-show="showError">
         {{ error }}
@@ -8,41 +8,43 @@
     <div class="alert alert-success" ng-show="showSuccess">
         {{ success }}
     </div>
+
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">Descripcion</th>
-                <th scope="col">Tiempo</th>
-                <th scope="col">Foto</th>
-                <th scope="col">Acciones</th>
+                <th scope="col">Reservante</th>
+                <th scope="col">Telefono Contacto</th>
+                <th scope="col">Fecha Reservada</th>
+                <th scope="col">Hora Reservada</th>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="cutItem in cutsList">
+            <tr ng-repeat="reservationItem in reservationsList">
                 <td>
-                    {{ cutItem.cutDescription }}
+                    {{ reservationItem.name }}
                 </td>
                 <td>
-                    {{ cutItem.cutTime }}
+                    {{ reservationItem.phone }}
                 </td>
                 <td>
-                    <img ng-src=" C://{{ cutItem.cutImage }}" width="300" height="300">
-
+                    {{ reservationItem.reservationDate }}
                 </td>
                 <td>
-                    <button type="button" ng-click="getCut(cutItem._id);" class="btn btn-primary">Editar</button>
-                    <button type="button" ng-click="deleteCut(cutItem._id);" class="btn btn-primary">Eliminar</button>
+                    {{ reservationItem.reservationTime }}
+                </td>
+                <td>
+                    <button type="button" ng-click="getReservation(reservationItem._id);" class="btn btn-primary">Editar</button>
+                    <button type="button" ng-click="deleteReservation(reservationItem._id);" class="btn btn-primary">Eliminar</button>
                 </td>
             </tr>
         </tbody>
     </table>
 
+    <button type="button" ng-click="newReservation();" class="btn btn-primary">Nueva Reserva</button>
 
-    <button type="button" ng-click="newCut();" class="btn btn-primary">Nuevo</button>
-
-    <input type="hidden" ng-model="book.bookId" />
-
-    <div class="modal" id="booksModal" tabindex="-1" role="dialog">
+    <input type="hidden" ng-model="reservation.reservationId" />
+    
+    <div class="modal" id="reservationsModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -52,32 +54,25 @@
                     </button>
                 </div>
                 <div class="modal-body">
-
                     <div class="form-group">
-                        <label>Descripci&oacute;n</label>
-                        <input type="text" class="form-control" ng-model="cut.cutDescription">
-                    </div>
-                    <div class="form-group">
-                        <label>Tiempo</label>
-                        <input type="text" class="form-control" ng-model="cut.cutTime">
+                        <label>Reservante</label>
+                        <input type="text" class="form-control" ng-model="reservation.name">
                     </div>
                     <div class="form-group">
-                        <label>Foto</label>
-                        <input type="file" ng-model="cut.cutImage" name="file" base-sixty-four-input required onload="onLoad" maxsize="500" accept="image/*">
+                        <label>Telefono de Contacto</label>
+                        <input type="text" class="form-control" ng-model="reservation.phone">
                     </div>
-                    <div ng-if="edit==0 || edit==2">
-
-
-                        <img data-ng-src="data:image/png;base64,{{cut.cutImage.base64}}" width="300" height="300" />
+                    <div class="form-group">
+                        <label>Fecha Reserva</label>
+                        <input type="date" class="form-control" ng-model="reservation.reservationDate">
                     </div>
-                    <div ng-if="edit==1">
-
-
-                        <img ng-src=" C://{{ cut.cutImage }}" width="300" height="300">
+                    <div class="form-group">
+                        <label>Hora Reserva</label>
+                        <input type="time" class="form-control" ng-model="reservation.reservationTime">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" ng-click="saveCut();" class="btn btn-primary">Guardar</button>
+                    <button type="button" ng-click="saveReservation();" class="btn btn-primary">Guardar</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 </div>
             </div>
@@ -88,13 +83,13 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Confirmar</h5>
+                    <h5 class="modal-title">Atención</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>¿Está seguro que desea eliminar el libro?</p>
+                    <p>¿Está seguro que desea cancelar la reserva?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" ng-click="confirmDelete();" class="btn btn-primary">Si</button>
