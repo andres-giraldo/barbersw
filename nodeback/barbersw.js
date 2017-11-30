@@ -37,4 +37,4 @@ app.use(apiRoutes);
 
 cutsRoutes(app);
 reservationsRoutes(app);
-app.listen(1051);
+app.listen(1050);
