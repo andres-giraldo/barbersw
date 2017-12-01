@@ -1,4 +1,4 @@
-var app = angular.module("barberswApp", ["ngRoute", "naif.base64"]);
+var app = angular.module("barberswApp", ["ngRoute", "naif.base64", "mwl.calendar", "ui.bootstrap"]);
 
 app.config(function ($routeProvider) {
     $routeProvider
@@ -22,7 +22,22 @@ app.config(function ($routeProvider) {
 });
 
 app.controller('mainController', function ($scope) {
-    $scope.message = 'Everyone come and see how good I look!';
+    $scope.calConfig = {
+        calendarView: 'day',
+        calendarDay: new Date()
+    };
+
+    $scope.events = [
+        {
+            title: 'My event title',
+            type: 'info',
+            startsAt: new Date("May 06, 2015 08:00:00"), // BREAKING CHANGE
+            endsAt: new Date("May 06, 2015 16:00:00"), // BREAKING CHANGE
+            editable: false,
+            deletable: false,
+            incrementsBadgeTotal: true
+        }
+    ];
 });
 
 app.controller('cutsController', ['$scope', '$http', function ($scope, $http) {
@@ -165,12 +180,12 @@ app.controller('reservationController', ['$scope', '$http', function ($scope, $h
     };
 
     var uploadedCount = 0;
-    
+
     $scope.files = [];
 
     listCuts();
     listReservations();
-    
+
     function listReservations() {
         $http({
             method: 'GET',
