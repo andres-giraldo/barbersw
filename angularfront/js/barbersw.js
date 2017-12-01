@@ -99,7 +99,6 @@ app.controller('cutsController', ['$scope', '$http', function ($scope, $http) {
     }
 
     $scope.saveCut = function () {
-        aler("Entro");
         var img = new Buffer($scope.cut.cutImage, 'base64');
         $http({
             method: 'POST',
