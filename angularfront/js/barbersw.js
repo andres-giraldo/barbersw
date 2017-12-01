@@ -164,11 +164,11 @@ app.controller('reservationController', ['$scope', '$http', function ($scope, $h
     $scope.onLoad = function (e, reader, file, fileList, fileOjects, fileObj) {
     };
 
-    // var uploadedCount = 0;
+    var uploadedCount = 0;
     
-    // $scope.files = [];
+    $scope.files = [];
 
-    // listCuts();
+    listCuts();
     listReservations();
     
     function listReservations() {
@@ -185,17 +185,17 @@ app.controller('reservationController', ['$scope', '$http', function ($scope, $h
         });
     }
 
-    // $scope.onFileSelect = function ($files) {
-    //     Upload.upload({
-    //         url: 'api/upload',
-    //         method: 'POST',
-    //         file: $files,
-    //     }).progress(function (e) {
-    //     }).then(function (data, status, headers, config) {
-    //         // file is uploaded successfully
-    //         console.log(data);
-    //     });
-    // }
+    $scope.onFileSelect = function ($files) {
+        Upload.upload({
+            url: 'api/upload',
+            method: 'POST',
+            file: $files,
+        }).progress(function (e) {
+        }).then(function (data, status, headers, config) {
+            // file is uploaded successfully
+            console.log(data);
+        });
+    }
 
     $scope.getReservation = function (reservationId) {
         $http({
@@ -269,17 +269,17 @@ app.controller('reservationController', ['$scope', '$http', function ($scope, $h
         });
     }
 
-    // function listCuts() {
-    //     $http({
-    //         method: 'GET',
-    //         url: 'http://localhost:1050/cuts'
-    //     }).then(function successCallback(response) {
-    //         $scope.cutsList = response.data;
-    //     }, function errorCallback(response) {
-    //         $scope.cutsList = [];
-    //         $scope.error = "Error consultando los cortes";
-    //         $scope.showError = true;
-    //         $scope.showSuccess = false;
-    //     });
-    // }
+    function listCuts() {
+        $http({
+            method: 'GET',
+            url: 'http://localhost:1050/cuts'
+        }).then(function successCallback(response) {
+            $scope.cutsList = response.data;
+        }, function errorCallback(response) {
+            $scope.cutsList = [];
+            $scope.error = "Error consultando los cortes";
+            $scope.showError = true;
+            $scope.showSuccess = false;
+        });
+    }
 }]);
