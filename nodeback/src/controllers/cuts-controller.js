@@ -2,7 +2,7 @@ const Cut = require("../models/cuts-model");
 
 exports.getCut = function (request, response) {
     let search = {};
-    if (request.query.bookId != null && request.query.cutId != '') {
+    if (request.query.cutId != null && request.query.cutId != '') {
         search = { _id: request.query.cutId };
     }
     Cut.find(search, function (error, cut) {
@@ -19,7 +19,7 @@ exports.saveCut = function (request, response) {
     let fs = require('fs');
 
     if (request.body.cutId != null && request.body.cutId != "") {
-        /* Get existent book and update values */
+        /* Get existent cut and update values */
         Cut.findById(request.body.cutId, (error, existentCut) => {
             existentCut.cutDescription = request.body.cutDescription;
             existentCut.cutTime = request.body.cutTime;
@@ -29,7 +29,7 @@ exports.saveCut = function (request, response) {
             });
         });
     } else {
-        /* Create a book */
+        /* Create a cut */
         var random = Math.random();
         saveData(new Cut({ cutDescription: request.body.cutDescription, cutTime: request.body.cutTime, cutImage: random + ".png" }), response);
         fs.writeFile("../angularfront/images/" + random + ".png", imageCut, 'base64', function (err) {

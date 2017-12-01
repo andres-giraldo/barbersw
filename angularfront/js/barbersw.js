@@ -31,28 +31,28 @@ app.controller('cutsController', ['$scope', '$http', function ($scope, $http) {
     $scope.showSuccess = false;
     $scope.success = "";
     $scope.cutsList = [];
-    $scope.edit=0;
-    $scope.rute="images/";
-
+    $scope.edit = 0;
+    $scope.rute = "images/";
+    $scope.date = new Date();
 
     $scope.onLoad = function (e, reader, file, fileList, fileOjects, fileObj) {
-        $scope.edit=2;
-      };
-    
-      var uploadedCount = 0;
-    
-      $scope.files = [];
+        $scope.edit = 2;
+    };
 
-   
-      listCuts();
+    var uploadedCount = 0;
+
+    $scope.files = [];
+
+
+    listCuts();
     function listCuts() {
         $http({
             method: 'GET',
             url: 'http://localhost:1050/cuts'
         }).then(function successCallback(response) {
+            $scope.date = new Date().getTime();
             $scope.cutsList = response.data;
-            console.log(JSON.stringify(response.data));
-        }, function errorCallback( response) {
+        }, function errorCallback(response) {
             $scope.cutsList = [];
             $scope.error = "Error consultando los cortes";
             $scope.showError = true;
@@ -61,36 +61,34 @@ app.controller('cutsController', ['$scope', '$http', function ($scope, $http) {
     }
 
 
-    $scope.onFileSelect = function($files) {
+    $scope.onFileSelect = function ($files) {
         Upload.upload({
-          url: 'api/upload',
-          method: 'POST',
-          file: $files,            
-        }).progress(function(e) {
-        }).then(function(data, status, headers, config) {
-          // file is uploaded successfully
-          console.log(data);
+            url: 'api/upload',
+            method: 'POST',
+            file: $files,
+        }).progress(function (e) {
+        }).then(function (data, status, headers, config) {
+            // file is uploaded successfully
         });
-    } 
+    }
 
 
     $scope.newCut = function (cutId) {
-        $scope.edit=0;
+        $scope.edit = 0;
         if ($scope.cut != undefined && $scope.cut.cutId != undefined) {
             $scope.cut = {};
         }
         jQuery("#booksModal").modal("show");
     }
     $scope.getCut = function (cutId) {
-        $scope.edit=1;
+        $scope.edit = 1;
         $http({
             method: 'GET',
             url: 'http://localhost:1050/cuts?cutId=' + cutId
         }).then(function successCallback(response) {
             if (response.data != null && response.data.length > 0) {
-                $scope.cut = response.data[0];    
+                $scope.cut = response.data[0];
                 $scope.cut.cutId = response.data[0]._id;
-                console.log($scope.cut.cutTime);
                 jQuery("#booksModal").modal("show");
             } else {
                 $scope.cut = {};
@@ -103,15 +101,15 @@ app.controller('cutsController', ['$scope', '$http', function ($scope, $http) {
         });
     }
     $scope.deleteCut = function (cutId) {
-        $scope.cut = {cutId: cutId}
+        $scope.cut = { cutId: cutId }
         jQuery("#deleteModal").modal("show");
     }
     $scope.saveCut = function () {
 
-       // var blob = new Blob([$scope.cut.cutImage], {type: 'image/png'});
+        // var blob = new Blob([$scope.cut.cutImage], {type: 'image/png'});
         //var file = new File([blob], 'imageFileName.png');
-        
-       // var img = new Buffer($scope.cut.cutImage, 'base64');
+
+        // var img = new Buffer($scope.cut.cutImage, 'base64');
         $http({
             method: 'POST',
             url: 'http://localhost:1050/cuts',
@@ -160,7 +158,7 @@ app.controller('reservationController', ['$scope', '$http', function ($scope, $h
     $scope.showSuccess = false;
     $scope.success = "";
     $scope.reservationsList = [];
-    
+
 
     $scope.onLoad = function (e, reader, file, fileList, fileOjects, fileObj) {
     };
