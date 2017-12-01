@@ -159,7 +159,9 @@ app.controller('reservationController', ['$scope', '$http', function ($scope, $h
     $scope.success = "";
     $scope.reservationsList = [];
     $scope.cutsList = [];
-
+    $scope.rute = "images/";
+    $scope.date = new Date();
+    $scope.cut = {};
 
     $scope.onLoad = function (e, reader, file, fileList, fileOjects, fileObj) {
     };
@@ -218,6 +220,9 @@ app.controller('reservationController', ['$scope', '$http', function ($scope, $h
     }
 
     $scope.saveReservation = function () {
+        $scope.reservation.cutNombre = $scope.cut.cutNombre;
+        $scope.reservation.cutImage = $scope.cut.cutImage;
+
         $http({
             method: 'POST',
             url: 'http://localhost:1050/reservations',
@@ -274,6 +279,7 @@ app.controller('reservationController', ['$scope', '$http', function ($scope, $h
             method: 'GET',
             url: 'http://localhost:1050/cuts'
         }).then(function successCallback(response) {
+            $scope.date = new Date().getTime();
             $scope.cutsList = response.data;
         }, function errorCallback(response) {
             $scope.cutsList = [];

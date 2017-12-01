@@ -7,7 +7,7 @@ reservationSchema = new Schema({
     reservationDate: { type: String, required: "El campo Fecha es obligatorio" },
     reservationTime: { type: String, required: "El campo Hora es obligatorio" },
 
-    cutDescription: { type: String, required: "El campo Corte es obligatorio" },
+    cutNombre: { type: String, required: "El campo Corte es obligatorio" },
     cutImage: { type: String },
 });
 

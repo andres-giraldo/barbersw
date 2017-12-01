@@ -33,10 +33,10 @@
                     {{ reservationItem.reservationTime }}
                 </td>
                 <td>
-                    {{ reservationItem.cutDescription }}
+                    {{ reservationItem.cutNombre }}
                 </td>
                 <td>
-                    <img ng-src=" C://{{ reservationItem.cutImage }}" width="100" height="100">
+                    <img ng-src="{{rute}}{{reservationItem.cutImage}}?{{date}}" width="100" height="100">
                 </td>
                 <td>
                     <button type="button" ng-click="getReservation(reservationItem._id);" class="btn btn-primary">Editar</button>
@@ -78,9 +78,13 @@
                     </div>
                     <div class="form-group">
                         <label>Corte</label>
-                        <select ng-model="reservation.cutDescription" ng-options="cut.cutDescription as cut.cutDescription for cut in cutsList">
+                        <select ng-model="cut" ng-options="x.cutNombre for x in cutsList">
                             <option value="">Seleccione un corte</option>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Imagen</label>
+                        <img ng-src="{{rute}}{{cut.cutImage}}?{{date}}" width="100" height="100" />
                     </div>
                 </div>
                 <div class="modal-footer">
