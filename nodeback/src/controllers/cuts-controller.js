@@ -27,7 +27,6 @@ exports.saveCut = function (request, response) {
         Cut.findById(request.body.cutId, (error, existentCut) => {
             existentCut.cutNombre = request.body.cutNombre;
             existentCut.cutDescription = request.body.cutDescription;
-            existentCut.cutTime = request.body.cutTime;
             saveData(existentCut, response);
             if (imageCut != null) {
                 fs.writeFile("../angularfront/images/" + existentCut.cutImage, imageCut, 'base64', function (err) {
@@ -38,7 +37,7 @@ exports.saveCut = function (request, response) {
     } else {
         /* Create a cut */
         var random = Math.random();
-        saveData(new Cut({ cutNombre: request.body.cutNombre, cutDescription: request.body.cutDescription, cutTime: request.body.cutTime, cutImage: imageCut != null ? (random + ".png") : undefined }), response);
+        saveData(new Cut({ cutNombre: request.body.cutNombre, cutDescription: request.body.cutDescription, cutImage: imageCut != null ? (random + ".png") : undefined }), response);
         fs.writeFile("../angularfront/images/" + random + ".png", imageCut, 'base64', function (err) {
             console.log(err);
         });

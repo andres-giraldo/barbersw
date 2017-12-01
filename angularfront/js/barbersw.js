@@ -3,45 +3,58 @@ var app = angular.module("barberswApp", ["ngRoute", "naif.base64", "mwl.calendar
 app.config(function ($routeProvider) {
     $routeProvider
         // route for the home page
-        .when('/', {
-            templateUrl: 'pages/agenda.html',
-            controller: 'agendaController'
+        .when("/", {
+            templateUrl: "pages/agenda.html",
+            controller: "agendaController"
         })
 
         // route for the about page
-        .when('/cuts', {
-            templateUrl: 'pages/cuts.html',
-            controller: 'cutsController'
+        .when("/cuts", {
+            templateUrl: "pages/cuts.html",
+            controller: "cutsController"
         })
 
         // route for the contact page
-        .when('/reservations', {
-            templateUrl: 'pages/reservations.html',
-            controller: 'reservationController'
+        .when("/reservations", {
+            templateUrl: "pages/reservations.html",
+            controller: "reservationController"
         });
 });
 
-app.controller('agendaController', function ($scope, moment, calendarConfig) {
-    calendarConfig.dateFormatter = 'moment';
+app.controller("agendaController", ["$scope", "$http", "moment", "calendarConfig", function ($scope, $http, moment, calendarConfig) {
+    calendarConfig.dateFormatter = "moment";
     $scope.calConfig = {
-        calendarView: 'day',
+        calendarView: "day",
         calendarDay: new Date()
     };
 
-    $scope.events = [
-        {
-            title: 'My event title',
-            type: 'info',
-            startsAt: new Date("Dec 01, 2017 08:15:00"), // BREAKING CHANGE
-            endsAt: new Date("Dec 01, 2017 09:00:00"), // BREAKING CHANGE
-            editable: false,
-            deletable: false,
-            incrementsBadgeTotal: true
-        }
-    ];
-});
+    $scope.events = [];
 
-app.controller('cutsController', ['$scope', '$http', function ($scope, $http) {
+    $http({
+        method: "GET",
+        url: "http://localhost:1050/reservations"
+    }).then(function successCallback(response) {
+        let eventsList = [];
+        for (let rese in response.data) {
+            rese = response.data[rese];
+
+            let eventObject = {};
+            eventObject.title = rese.name + " - " + rese.cutNombre;
+            eventObject.type = "info";
+            eventObject.startsAt = moment(new Date(rese.reservationDate)).add(new Date(rese.reservationTime).format("H"), "h").add(new Date(rese.reservationTime).format("M"), "m");
+            eventObject.endsAt = moment(eventObject.startsAt).add(30, "m").toDate();
+            eventObject.editable = false;
+            eventObject.deletable = false;
+            eventObject.incrementsBadgeTotal = true;
+            eventsList.push(eventObject);
+        }
+        $scope.events = eventsList;
+    }, function errorCallback(response) {
+        console.log(response);
+    });
+}]);
+
+app.controller("cutsController", ["$scope", "$http", function ($scope, $http) {
     $scope.showError = false;
     $scope.error = "";
     $scope.showSuccess = false;
@@ -63,8 +76,8 @@ app.controller('cutsController', ['$scope', '$http', function ($scope, $http) {
     listCuts();
     function listCuts() {
         $http({
-            method: 'GET',
-            url: 'http://localhost:1050/cuts'
+            method: "GET",
+            url: "http://localhost:1050/cuts"
         }).then(function successCallback(response) {
             $scope.date = new Date().getTime();
             $scope.cutsList = response.data;
@@ -79,8 +92,8 @@ app.controller('cutsController', ['$scope', '$http', function ($scope, $http) {
 
     $scope.onFileSelect = function ($files) {
         Upload.upload({
-            url: 'api/upload',
-            method: 'POST',
+            url: "api/upload",
+            method: "POST",
             file: $files,
         }).progress(function (e) {
         }).then(function (data, status, headers, config) {
@@ -94,18 +107,18 @@ app.controller('cutsController', ['$scope', '$http', function ($scope, $http) {
         if ($scope.cut != undefined && $scope.cut.cutId != undefined) {
             $scope.cut = {};
         }
-        jQuery("#booksModal").modal("show");
+        jQuery("#cutsModal").modal("show");
     }
     $scope.getCut = function (cutId) {
         $scope.edit = 1;
         $http({
-            method: 'GET',
-            url: 'http://localhost:1050/cuts?cutId=' + cutId
+            method: "GET",
+            url: "http://localhost:1050/cuts?cutId=" + cutId
         }).then(function successCallback(response) {
             if (response.data != null && response.data.length > 0) {
                 $scope.cut = response.data[0];
                 $scope.cut.cutId = response.data[0]._id;
-                jQuery("#booksModal").modal("show");
+                jQuery("#cutsModal").modal("show");
             } else {
                 $scope.cut = {};
                 $scope.error = "Error consultando los datos del libro";
@@ -122,15 +135,15 @@ app.controller('cutsController', ['$scope', '$http', function ($scope, $http) {
     }
     $scope.saveCut = function () {
 
-        // var blob = new Blob([$scope.cut.cutImage], {type: 'image/png'});
-        //var file = new File([blob], 'imageFileName.png');
+        // var blob = new Blob([$scope.cut.cutImage], {type: "image/png"});
+        //var file = new File([blob], "imageFileName.png");
 
-        // var img = new Buffer($scope.cut.cutImage, 'base64');
+        // var img = new Buffer($scope.cut.cutImage, "base64");
         $http({
-            method: 'POST',
-            url: 'http://localhost:1050/cuts',
+            method: "POST",
+            url: "http://localhost:1050/cuts",
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json"
             },
             data: $scope.cut
         }).then(function successCallback(response) {
@@ -139,18 +152,18 @@ app.controller('cutsController', ['$scope', '$http', function ($scope, $http) {
             $scope.success = "El corte ha sido guardado correctamente";
             $scope.showError = false;
             $scope.showSuccess = true;
-            jQuery("#booksModal").modal("hide");
+            jQuery("#cutsModal").modal("hide");
         }, function errorCallback(response) {
             $scope.error = response.data.errors;
             $scope.showError = true;
             $scope.showSuccess = false;
-            jQuery("#booksModal").modal("hide");
+            jQuery("#cutsModal").modal("hide");
         });
     }
     $scope.confirmDelete = function () {
         $http({
-            method: 'DELETE',
-            url: 'http://localhost:1050/cuts?cutId=' + $scope.cut.cutId
+            method: "DELETE",
+            url: "http://localhost:1050/cuts?cutId=" + $scope.cut.cutId
         }).then(function successCallback(response) {
             $scope.cut = {};
             listCuts();
@@ -168,7 +181,7 @@ app.controller('cutsController', ['$scope', '$http', function ($scope, $http) {
     }
 }]);
 
-app.controller('reservationController', ['$scope', '$http', function ($scope, $http) {
+app.controller("reservationController", ["$scope", "$http", function ($scope, $http) {
     $scope.showError = false;
     $scope.error = "";
     $scope.showSuccess = false;
@@ -179,21 +192,19 @@ app.controller('reservationController', ['$scope', '$http', function ($scope, $h
     $scope.date = new Date();
     $scope.cut = {};
 
-    $scope.onLoad = function (e, reader, file, fileList, fileOjects, fileObj) {
-    };
-
-    var uploadedCount = 0;
-
-    $scope.files = [];
-
     listCuts();
     listReservations();
 
     function listReservations() {
         $http({
-            method: 'GET',
-            url: 'http://localhost:1050/reservations'
+            method: "GET",
+            url: "http://localhost:1050/reservations"
         }).then(function successCallback(response) {
+            for (let rese in response.data) {
+                rese = response.data[rese];
+                rese.reservationDate = new Date(rese.reservationDate).format("yyyy-mm-dd");
+                rese.reservationTime = new Date(rese.reservationTime).format("hh:MM TT");
+            }
             $scope.reservationsList = response.data;
         }, function errorCallback(response) {
             $scope.reservationsList = [];
@@ -203,25 +214,15 @@ app.controller('reservationController', ['$scope', '$http', function ($scope, $h
         });
     }
 
-    $scope.onFileSelect = function ($files) {
-        Upload.upload({
-            url: 'api/upload',
-            method: 'POST',
-            file: $files,
-        }).progress(function (e) {
-        }).then(function (data, status, headers, config) {
-            // file is uploaded successfully
-            console.log(data);
-        });
-    }
-
     $scope.getReservation = function (reservationId) {
         $http({
-            method: 'GET',
-            url: 'http://localhost:1050/reservations?reservationId=' + reservationId
+            method: "GET",
+            url: "http://localhost:1050/reservations?reservationId=" + reservationId
         }).then(function successCallback(response) {
             if (response.data != null && response.data.length > 0) {
                 $scope.reservation = response.data[0];
+                $scope.reservation.reservationDate = new Date(response.data[0].reservationDate);
+                $scope.reservation.reservationTime = new Date(response.data[0].reservationTime);
                 $scope.reservation.reservationId = response.data[0]._id;
                 jQuery("#reservationsModal").modal("show");
             } else {
@@ -238,10 +239,9 @@ app.controller('reservationController', ['$scope', '$http', function ($scope, $h
     $scope.saveReservation = function () {
         $scope.reservation.cutNombre = $scope.cut.cutNombre;
         $scope.reservation.cutImage = $scope.cut.cutImage;
-
         $http({
-            method: 'POST',
-            url: 'http://localhost:1050/reservations',
+            method: "POST",
+            url: "http://localhost:1050/reservations",
             data: $scope.reservation
         }).then(function successCallback(response) {
             $scope.reservation = {};
@@ -262,6 +262,11 @@ app.controller('reservationController', ['$scope', '$http', function ($scope, $h
         if ($scope.reservation != undefined && $scope.reservation.reservationId != undefined) {
             $scope.reservation = {};
         }
+        if ($scope.cut != undefined) {
+            $scope.cut = {};
+            $scope.cutImage = "";
+        }
+        $scope.date = new Date();
         jQuery("#reservationsModal").modal("show");
     }
 
@@ -272,8 +277,8 @@ app.controller('reservationController', ['$scope', '$http', function ($scope, $h
 
     $scope.confirmDelete = function () {
         $http({
-            method: 'DELETE',
-            url: 'http://localhost:1050/reservations?reservationId=' + $scope.reservation.reservationId
+            method: "DELETE",
+            url: "http://localhost:1050/reservations?reservationId=" + $scope.reservation.reservationId
         }).then(function successCallback(response) {
             $scope.reservation = {};
             listReservations();
@@ -292,8 +297,8 @@ app.controller('reservationController', ['$scope', '$http', function ($scope, $h
 
     function listCuts() {
         $http({
-            method: 'GET',
-            url: 'http://localhost:1050/cuts'
+            method: "GET",
+            url: "http://localhost:1050/cuts"
         }).then(function successCallback(response) {
             $scope.date = new Date().getTime();
             $scope.cutsList = response.data;
