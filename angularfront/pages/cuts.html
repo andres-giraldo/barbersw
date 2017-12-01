@@ -8,7 +8,7 @@
     <div class="alert alert-success" ng-show="showSuccess">
         {{ success }}
     </div>
-    
+
     <div class="row">
         <div class="card col-3" ng-repeat="cutItem in cutsList">
             <img class="card-img-top" height="200px" ng-src="{{rute}}{{cutItem.cutImage}}?{{date}}">
@@ -35,10 +35,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                        <div class="form-group">
-                                <label>Nombre</label>
-                                <input type="text" class="form-control" ng-model="cut.cutNombre">
-                            </div>
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" class="form-control" ng-model="cut.cutNombre">
+                    </div>
 
                     <div class="form-group">
                         <label>Descripci&oacute;n</label>
@@ -58,14 +58,10 @@
                         <input type="file" ng-model="cut.cutImage" name="file" base-sixty-four-input required onload="onLoad" maxsize="500" accept="image/*">
                     </div>
                     <div ng-if="edit==0 || edit==2">
-
-
                         <img data-ng-src="data:image/png;base64,{{cut.cutImage.base64}}" width="300" height="300" />
                     </div>
                     <div ng-if="edit==1">
-
-
-                        <img ng-src=" {{rute}}{{ cut.cutImage }}" width="300" height="300" />
+                        <img ng-src="{{rute}}{{cut.cutImage}}?{{date}}" width="300" height="300" />
                     </div>
                 </div>
                 <div class="modal-footer">

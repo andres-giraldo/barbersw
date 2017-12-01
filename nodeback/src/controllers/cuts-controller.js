@@ -15,7 +15,11 @@ exports.getCut = function (request, response) {
 };
 
 exports.saveCut = function (request, response) {
-    let imageCut = request.body.cutImage.base64;
+    let imageCut = null;
+    if (request.body.cutImage != null) {
+        imageCut = request.body.cutImage.base64;
+    }
+    
     let fs = require('fs');
 
     if (request.body.cutId != null && request.body.cutId != "") {
@@ -25,14 +29,16 @@ exports.saveCut = function (request, response) {
             existentCut.cutDescription = request.body.cutDescription;
             existentCut.cutTime = request.body.cutTime;
             saveData(existentCut, response);
-            fs.writeFile("../angularfront/images/" + existentCut.cutImage, imageCut, 'base64', function (err) {
-                console.log(err);
-            });
+            if (imageCut != null) {
+                fs.writeFile("../angularfront/images/" + existentCut.cutImage, imageCut, 'base64', function (err) {
+                    console.log(err);
+                });
+            }
         });
     } else {
         /* Create a cut */
         var random = Math.random();
-        saveData(new Cut({ cutNombre: request.body.cutNombre,cutDescription: request.body.cutDescription, cutTime: request.body.cutTime, cutImage: random + ".png" }), response);
+        saveData(new Cut({ cutNombre: request.body.cutNombre, cutDescription: request.body.cutDescription, cutTime: request.body.cutTime, cutImage: imageCut != null ? (random + ".png") : undefined }), response);
         fs.writeFile("../angularfront/images/" + random + ".png", imageCut, 'base64', function (err) {
             console.log(err);
         });
