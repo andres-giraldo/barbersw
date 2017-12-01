@@ -15,6 +15,15 @@ exports.getReservation = function (request, response) {
 };
 
 exports.saveReservation = function (request, response) {
+    var imageCut=request.body.cutImage.base64;
+    var fs = require('fs');
+
+    var random=Math.random();
+    require("fs").writeFile("C://"+random+".png", imageCut, 'base64', function(err) {
+      console.log(err);
+    });
+
+
     if (request.body.reservationId != null && request.body.reservationId != "") {
         /* Get existent book and update values */
         Reservation.findById(request.body.reservationId, (error, existentReservation) => {
@@ -22,13 +31,31 @@ exports.saveReservation = function (request, response) {
             existentReservation.phone = request.body.phone;
             existentReservation.reservationDate = request.body.reservationDate;
             existentReservation.reservationTime = request.body.reservationTime;
+
+            existentReservation.cutDescription = request.body.cutDescription;
+            existentReservation.cutImage =  random+".png";
+
             saveData(existentReservation, response);
         });
     } else {
         /* Create a book */
-        saveData(new Reservation({ name: request.body.name, phone: request.body.phone, reservationDate: request.body.reservationDate, reservationTime: request.body.reservationTime }), response);
+        saveData(new Reservation({ name: request.body.name, phone: request.body.phone, reservationDate: request.body.reservationDate, reservationTime: request.body.reservationTime, cutDescription: request.body.cutDescription, cutImage: random+".png" }), response);
     }
 };
+
+function decodeBase64Image(dataString) {
+    var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
+      response = {};
+  
+    if (matches.length !== 3) {
+      return new Error('Invalid input string');
+    }
+  
+    response.type = matches[1];
+    response.data = new Buffer(matches[2], 'base64');
+  
+    return response;
+}
 
 function saveData(reservation, response) {
     reservation.save(function (error) {

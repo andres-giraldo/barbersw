@@ -33,6 +33,12 @@
                     {{ reservationItem.reservationTime }}
                 </td>
                 <td>
+                    {{ reservationItem.cutDescription }}
+                </td>
+                <td>
+                    <img ng-src=" C://{{ reservationItem.cutImage }}" width="100" height="100">
+                </td>
+                <td>
                     <button type="button" ng-click="getReservation(reservationItem._id);" class="btn btn-primary">Editar</button>
                     <button type="button" ng-click="deleteReservation(reservationItem._id);" class="btn btn-primary">Eliminar</button>
                 </td>
@@ -69,6 +75,12 @@
                     <div class="form-group">
                         <label>Hora Reserva</label>
                         <input type="time" class="form-control" ng-model="reservation.reservationTime">
+                    </div>
+                    <div class="form-group">
+                        <label>Corte</label>
+                        <select ng-model="reservation.cutDescription" ng-options="cut.cutDescription as cut.cutDescription for cut in cutsList">
+                            <option value="">Seleccione un país</option>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">

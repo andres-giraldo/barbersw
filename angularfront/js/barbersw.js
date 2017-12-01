@@ -146,11 +146,18 @@ app.controller('reservationController', ['$scope', '$http', function ($scope, $h
     $scope.showSuccess = false;
     $scope.success = "";
     $scope.reservationsList = [];
+    $scope.cutsList = [];
 
     $scope.onLoad = function (e, reader, file, fileList, fileOjects, fileObj) {
     };
 
+    var uploadedCount = 0;
+    
+    $scope.files = [];
+
+    listCuts();
     listReservations();
+    
     function listReservations() {
         $http({
             method: 'GET',
@@ -162,6 +169,18 @@ app.controller('reservationController', ['$scope', '$http', function ($scope, $h
             $scope.error = "Error consultando las reservas";
             $scope.showError = true;
             $scope.showSuccess = false;
+        });
+    }
+
+    $scope.onFileSelect = function ($files) {
+        Upload.upload({
+            url: 'api/upload',
+            method: 'POST',
+            file: $files,
+        }).progress(function (e) {
+        }).then(function (data, status, headers, config) {
+            // file is uploaded successfully
+            console.log(data);
         });
     }
 
@@ -234,6 +253,20 @@ app.controller('reservationController', ['$scope', '$http', function ($scope, $h
             $scope.showError = true;
             $scope.showSuccess = false;
             jQuery("#deleteModal").modal("hide");
+        });
+    }
+
+    function listCuts() {
+        $http({
+            method: 'GET',
+            url: 'http://localhost:1050/cuts'
+        }).then(function successCallback(response) {
+            $scope.cutsList = response.data;
+        }, function errorCallback(response) {
+            $scope.cutsList = [];
+            $scope.error = "Error consultando los cortes";
+            $scope.showError = true;
+            $scope.showSuccess = false;
         });
     }
 }]);
