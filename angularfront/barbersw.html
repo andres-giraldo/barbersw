@@ -6,51 +6,49 @@
     <title>BarberSW</title>
 
     <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/angular-bootstrap-calendar.css" />
+    <link rel="stylesheet" href="css/angular-bootstrap-calendar.min.css" />
 
     <script src="js/lib/angular.min.js"></script>
     <script src="js/lib/angular-route.min.js"></script>
-    <script src="js/barbersw.js"></script>
 
     <script src="js/lib/jquery-3.1.1.slim.min.js"></script>
     <script src="js/lib/tether.min.js"></script>
     <script src="js/lib/bootstrap.min.js"></script>
     <script src="js/lib/angular-base64-upload.js"></script>
 
-    <script src="js/lib/ui-bootstrap-tpls.min.js"></script>
     <script src="js/lib/moment.min.js"></script>
-    <script src="js/lib/angular-bootstrap-calendar.js"></script>
-    <script src="js/lib/angular-bootstrap-calendar-tpls.js"></script>
+    <script src="js/lib/ui-bootstrap-tpls.min.js"></script>
+    <script src="js/lib/angular-bootstrap-calendar.min.js"></script>
+    <script src="js/lib/angular-bootstrap-calendar-tpls.min.js"></script>
+    <script src="js/lib/es.js"></script>
+
+    <script src="js/barbersw.js"></script>
 </head>
 
-<body ng-controller="mainController">
+<body ng-controller="agendaController">
     <header>
-        <nav class="navbar navbar-default">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#!/">BarberSW</a>
-                </div>
-
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="#!/">
-                            <i class="fa fa-home"></i> Inicio
-                        </a>
+        <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#!/">BarberSW</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#!/">Inicio</a>
                     </li>
-                    <li>
-                        <a href="#!/cuts">
-                            <i class="fa fa-shield"></i> Cortes
-                        </a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#!/cuts">Cortes</a>
                     </li>
-                    <li>
-                        <a href="#!/reservations">
-                            <i class="fa fa-comment"></i> Reservas
-                        </a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#!/reservations">Reservas</a>
                     </li>
                 </ul>
             </div>
         </nav>
     </header>
+    <br/>
     <div ng-view></div>
 </body>
 

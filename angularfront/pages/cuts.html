@@ -1,14 +1,12 @@
 <div class="container">
-    <center>
-        <h1>Cortes</h1>
-    </center>
+    <h1 class="text-center">Cortes</h1>
     <div class="alert alert-danger" ng-show="showError">
         {{ error }}
     </div>
     <div class="alert alert-success" ng-show="showSuccess">
         {{ success }}
     </div>
-
+    <br/>
     <div class="row">
         <div class="card col-3" ng-repeat="cutItem in cutsList">
             <img class="card-img-top" height="200px" ng-src="{{rute}}{{cutItem.cutImage}}?{{date}}">
@@ -20,7 +18,7 @@
             </div>
         </div>
     </div>
-
+    <br/>
     <button type="button" ng-click="newCut();" class="btn btn-primary">Nuevo</button>
 
     <input type="hidden" ng-model="book.bookId" />

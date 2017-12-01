@@ -1,0 +1,40 @@
+<div class="container">
+    <h1 class="text-center">Agenda {{calendarTitle}}</h1>
+    <br/>
+    <div class="panel panel-primary">
+        <div class="panel-heading clearfix">
+            <div class="row">
+                <div class="col-6 text-center">
+                    <div class="btn-group">
+                        <label class="btn btn-primary" ng-model="calConfig.calendarView" btn-radio="'day'">Dia</label>
+                        <label class="btn btn-primary" ng-model="calConfig.calendarView" btn-radio="'week'">Semana</label>
+                        <label class="btn btn-primary" ng-model="calConfig.calendarView" btn-radio="'month'">Mes</label>
+                        <label class="btn btn-primary" ng-model="calConfig.calendarView" btn-radio="'year'">Año</label>
+                    </div>
+                </div>
+                <br class="visible-xs visible-sm">
+                <div class="col-6 text-center">
+                    <div class="btn-group">
+                        <button class="btn btn-primary" mwl-date-modifier date="calConfig.calendarDay" decrement="calConfig.calendarView">
+                            Anterior
+                        </button>
+                        <button class="btn btn-default" mwl-date-modifier date="calConfig.calendarDay" set-to-today>
+                            Hoy
+                        </button>
+                        <button class="btn btn-primary" mwl-date-modifier date="calConfig.calendarDay" increment="calConfig.calendarView">
+                            Siguiente
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <mwl-calendar events="events" view="calConfig.calendarView" view-title="calendarTitle" view-date="calConfig.calendarDay"
+                day-view-start="08:00" day-view-end="20:00" day-view-split="15" on-event-click="eventClicked(calendarEvent)"
+                on-event-times-changed="calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
+                edit-event-html="'<i class=\'glyphicon glyphicon-pencil\'></i>'" delete-event-html="'<i class=\'glyphicon glyphicon-remove\'></i>'"
+                on-edit-event-click="eventEdited(calendarEvent)" on-delete-event-click="eventDeleted(calendarEvent)" auto-open="true">
+            </mwl-calendar>
+        </div>
+    </div>
+</div>

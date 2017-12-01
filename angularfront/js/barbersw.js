@@ -4,8 +4,8 @@ app.config(function ($routeProvider) {
     $routeProvider
         // route for the home page
         .when('/', {
-            templateUrl: 'pages/home.html',
-            controller: 'mainController'
+            templateUrl: 'pages/agenda.html',
+            controller: 'agendaController'
         })
 
         // route for the about page
@@ -21,7 +21,8 @@ app.config(function ($routeProvider) {
         });
 });
 
-app.controller('mainController', function ($scope) {
+app.controller('agendaController', function ($scope, moment, calendarConfig) {
+    calendarConfig.dateFormatter = 'moment';
     $scope.calConfig = {
         calendarView: 'day',
         calendarDay: new Date()
@@ -31,8 +32,8 @@ app.controller('mainController', function ($scope) {
         {
             title: 'My event title',
             type: 'info',
-            startsAt: new Date("May 06, 2015 08:00:00"), // BREAKING CHANGE
-            endsAt: new Date("May 06, 2015 16:00:00"), // BREAKING CHANGE
+            startsAt: new Date("Dec 01, 2017 08:15:00"), // BREAKING CHANGE
+            endsAt: new Date("Dec 01, 2017 09:00:00"), // BREAKING CHANGE
             editable: false,
             deletable: false,
             incrementsBadgeTotal: true
