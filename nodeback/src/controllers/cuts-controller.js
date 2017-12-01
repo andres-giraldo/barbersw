@@ -2,8 +2,8 @@ const Cut = require("../models/cuts-model");
 
 exports.getCut = function (request, response) {
     let search = {};
-    if (request.query.bookId != null && request.query.cutId != '') {
-        search = {_id: request.query.cutId};
+    if (request.query.cutId != null && request.query.cutId != '') {
+        search = { _id: request.query.cutId };
     }
     Cut.find(search, function (error, cut) {
         if (error) {
@@ -14,50 +14,50 @@ exports.getCut = function (request, response) {
     });
 };
 
-exports.saveCut= function (request, response) {
-
-    console.log("infor " + JSON.stringify( request.body.cutImage));
-    var imageCut=request.body.cutImage.base64;
-    var fs = require('fs');
-
-
-    var random=Math.random();
-    require("fs").writeFile("C://"+random+".png", imageCut, 'base64', function(err) {
-      console.log(err);
-    });
+exports.saveCut = function (request, response) {
+    let imageCut = null;
+    if (request.body.cutImage != null) {
+        imageCut = request.body.cutImage.base64;
+    }
+    
+    let fs = require('fs');
 
     if (request.body.cutId != null && request.body.cutId != "") {
-        /* Get existent book and update values */
+        /* Get existent cut and update values */
         Cut.findById(request.body.cutId, (error, existentCut) => {
+            existentCut.cutNombre = request.body.cutNombre;
             existentCut.cutDescription = request.body.cutDescription;
             existentCut.cutTime = request.body.cutTime;
-            existentCut.cutImage =  random+".png";
-
             saveData(existentCut, response);
+            if (imageCut != null) {
+                fs.writeFile("../angularfront/images/" + existentCut.cutImage, imageCut, 'base64', function (err) {
+                    console.log(err);
+                });
+            }
         });
     } else {
-
-
-        /* Create a book */
-
-        
-        saveData(new Cut({ cutDescription: request.body.cutDescription, cutTime: request.body.cutTime, cutImage: random+".png"}), response);
+        /* Create a cut */
+        var random = Math.random();
+        saveData(new Cut({ cutNombre: request.body.cutNombre, cutDescription: request.body.cutDescription, cutTime: request.body.cutTime, cutImage: imageCut != null ? (random + ".png") : undefined }), response);
+        fs.writeFile("../angularfront/images/" + random + ".png", imageCut, 'base64', function (err) {
+            console.log(err);
+        });
     }
 };
 
 function decodeBase64Image(dataString) {
     var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
-      response = {};
-  
+        response = {};
+
     if (matches.length !== 3) {
-      return new Error('Invalid input string');
+        return new Error('Invalid input string');
     }
-  
+
     response.type = matches[1];
     response.data = new Buffer(matches[2], 'base64');
-  
+
     return response;
-  }
+}
 
 function saveData(cut, response) {
     cut.save(function (error) {
@@ -70,7 +70,6 @@ function saveData(cut, response) {
 }
 
 exports.deleteCut = function (request, response) {
-    console.log(request);
     if (request.query.cutId != null && request.query.cutId != "") {
         Cut.remove({ _id: request.query.cutId }, function (error, cut) {
             if (error) {

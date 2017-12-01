@@ -1,6 +1,6 @@
 <div class="container">
     <center>
-        <h1>LIBROS</h1>
+        <h1>Cortes</h1>
     </center>
     <div class="alert alert-danger" ng-show="showError">
         {{ error }}
@@ -8,35 +8,18 @@
     <div class="alert alert-success" ng-show="showSuccess">
         {{ success }}
     </div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Descripcion</th>
-                <th scope="col">Tiempo</th>
-                <th scope="col">Foto</th>
-                <th scope="col">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="cutItem in cutsList">
-                <td>
-                    {{ cutItem.cutDescription }}
-                </td>
-                <td>
-                    {{ cutItem.cutTime }}
-                </td>
-                <td>
-                    <img ng-src=" C://{{ cutItem.cutImage }}" width="300" height="300">
 
-                </td>
-                <td>
-                    <button type="button" ng-click="getCut(cutItem._id);" class="btn btn-primary">Editar</button>
-                    <button type="button" ng-click="deleteCut(cutItem._id);" class="btn btn-primary">Eliminar</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
+    <div class="row">
+        <div class="card col-3" ng-repeat="cutItem in cutsList">
+            <img class="card-img-top" height="200px" ng-src="{{rute}}{{cutItem.cutImage}}?{{date}}">
+            <div class="card-block">
+                <h4 class="card-title">{{cutItem.cutNombre}}</h4>
+                <p class="card-text">{{cutItem.cutDescription}}</p>
+                <button type="button" ng-click="getCut(cutItem._id);" class="btn btn-primary">Editar</button>
+                <button type="button" ng-click="deleteCut(cutItem._id);" class="btn btn-primary">Eliminar</button>
+            </div>
+        </div>
+    </div>
 
     <button type="button" ng-click="newCut();" class="btn btn-primary">Nuevo</button>
 
@@ -46,34 +29,39 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Libro</h5>
+                    <h5 class="modal-title">Corte</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" class="form-control" ng-model="cut.cutNombre">
+                    </div>
 
                     <div class="form-group">
                         <label>Descripci&oacute;n</label>
-                        <input type="text" class="form-control" ng-model="cut.cutDescription">
+                        <textarea class="form-control" ng-model="cut.cutDescription"></textarea>
                     </div>
                     <div class="form-group">
                         <label>Tiempo</label>
-                        <input type="text" class="form-control" ng-model="cut.cutTime">
+                        <select class="form-control" ng-model="cut.cutTime">
+                            <option value="15">15</option>
+                            <option value="30">30</option>
+                            <option value="45">45</option>
+                            <option value="60">60</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label>Foto</label>
                         <input type="file" ng-model="cut.cutImage" name="file" base-sixty-four-input required onload="onLoad" maxsize="500" accept="image/*">
                     </div>
                     <div ng-if="edit==0 || edit==2">
-
-
                         <img data-ng-src="data:image/png;base64,{{cut.cutImage.base64}}" width="300" height="300" />
                     </div>
                     <div ng-if="edit==1">
-
-
-                        <img ng-src=" C://{{ cut.cutImage }}" width="300" height="300">
+                        <img ng-src="{{rute}}{{cut.cutImage}}?{{date}}" width="300" height="300" />
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -94,7 +82,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>¿Está seguro que desea eliminar el libro?</p>
+                    <p>¿Está seguro que desea eliminar el corte?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" ng-click="confirmDelete();" class="btn btn-primary">Si</button>

@@ -31,13 +31,18 @@ app.controller('cutsController', ['$scope', '$http', function ($scope, $http) {
     $scope.showSuccess = false;
     $scope.success = "";
     $scope.cutsList = [];
+    $scope.edit = 0;
+    $scope.rute = "images/";
+    $scope.date = new Date();
 
     $scope.onLoad = function (e, reader, file, fileList, fileOjects, fileObj) {
+        $scope.edit = 2;
     };
 
     var uploadedCount = 0;
 
     $scope.files = [];
+
 
     listCuts();
     function listCuts() {
@@ -45,6 +50,7 @@ app.controller('cutsController', ['$scope', '$http', function ($scope, $http) {
             method: 'GET',
             url: 'http://localhost:1050/cuts'
         }).then(function successCallback(response) {
+            $scope.date = new Date().getTime();
             $scope.cutsList = response.data;
         }, function errorCallback(response) {
             $scope.cutsList = [];
@@ -54,6 +60,7 @@ app.controller('cutsController', ['$scope', '$http', function ($scope, $http) {
         });
     }
 
+
     $scope.onFileSelect = function ($files) {
         Upload.upload({
             url: 'api/upload',
@@ -62,18 +69,19 @@ app.controller('cutsController', ['$scope', '$http', function ($scope, $http) {
         }).progress(function (e) {
         }).then(function (data, status, headers, config) {
             // file is uploaded successfully
-            console.log(data);
         });
     }
 
+
     $scope.newCut = function (cutId) {
+        $scope.edit = 0;
         if ($scope.cut != undefined && $scope.cut.cutId != undefined) {
             $scope.cut = {};
         }
         jQuery("#booksModal").modal("show");
     }
-
     $scope.getCut = function (cutId) {
+        $scope.edit = 1;
         $http({
             method: 'GET',
             url: 'http://localhost:1050/cuts?cutId=' + cutId
@@ -92,17 +100,22 @@ app.controller('cutsController', ['$scope', '$http', function ($scope, $http) {
             $scope.cut = {};
         });
     }
-
     $scope.deleteCut = function (cutId) {
         $scope.cut = { cutId: cutId }
         jQuery("#deleteModal").modal("show");
     }
-
     $scope.saveCut = function () {
-        var img = new Buffer($scope.cut.cutImage, 'base64');
+
+        // var blob = new Blob([$scope.cut.cutImage], {type: 'image/png'});
+        //var file = new File([blob], 'imageFileName.png');
+
+        // var img = new Buffer($scope.cut.cutImage, 'base64');
         $http({
             method: 'POST',
             url: 'http://localhost:1050/cuts',
+            headers: {
+                'Content-Type': 'application/json'
+            },
             data: $scope.cut
         }).then(function successCallback(response) {
             $scope.cut = {};
@@ -118,7 +131,6 @@ app.controller('cutsController', ['$scope', '$http', function ($scope, $http) {
             jQuery("#booksModal").modal("hide");
         });
     }
-
     $scope.confirmDelete = function () {
         $http({
             method: 'DELETE',
@@ -126,7 +138,7 @@ app.controller('cutsController', ['$scope', '$http', function ($scope, $http) {
         }).then(function successCallback(response) {
             $scope.cut = {};
             listCuts();
-            $scope.success = "El libro ha sido eliminado correctamente";
+            $scope.success = "El corte ha sido eliminado correctamente";
             $scope.showError = false;
             $scope.showSuccess = true;
             jQuery("#deleteModal").modal("hide");
@@ -147,6 +159,7 @@ app.controller('reservationController', ['$scope', '$http', function ($scope, $h
     $scope.success = "";
     $scope.reservationsList = [];
     $scope.cutsList = [];
+
 
     $scope.onLoad = function (e, reader, file, fileList, fileOjects, fileObj) {
     };

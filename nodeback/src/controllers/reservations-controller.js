@@ -3,7 +3,7 @@ const Reservation = require("../models/reservations-model");
 exports.getReservation = function (request, response) {
     let search = {};
     if (request.query.reservationId != null && request.query.reservationId != '') {
-        search = {_id: request.query.reservationId};
+        search = { _id: request.query.reservationId };
     }
     Reservation.find(search, function (error, reservation) {
         if (error) {
@@ -68,7 +68,6 @@ function saveData(reservation, response) {
 }
 
 exports.deleteReservation = function (request, response) {
-    console.log(request);
     if (request.query.reservationId != null && request.query.reservationId != "") {
         Reservation.remove({ _id: request.query.reservationId }, function (error, reservation) {
             if (error) {
